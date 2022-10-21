@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Archive
+{% endblock %}
+
+
+{% block body %}
+    <main role="main" class="container" >
+    <script src="{{ url_for('static',filename='js/sortTable.js') }}"></script>
+        <div class="mb-3 justify-content-end">
+            <table class="table table-striped" id="info_table">
+                <thead>
+                <tr>
+                    <th onclick="sortTable(0)" scope="col" style="width: 30px">ID</th>
+                    <th onclick="sortTable(1)" scope="col">Brukare</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for data in  result["clients"] %}
+                    <tr>
+                        <td style="width: 30px">
+                            <a href="/period?period={{ result.period }}&client_id={{ data.client_id }}">
+                                {{ data.client_id }}
+                            </a>
+                        </td>
+                        <td>{{ data.client_name }}</td>
+                        {#                        <td>{{ data.employer_name }}</td>#}
+                        {#                        <td>{{ data.time }}</td>#}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </main>
+
+{% endblock %}

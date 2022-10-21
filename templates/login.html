@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block body %}
+    <form class="mt-5 mx-auto" style="width: 250px;" method="post">
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <input name="login" type="login" id="login" class="form-control" placeholder="Login"/>
+        </div>
+
+        <div class="form-outline mb-4">
+            <input name="password" type="password" id="password" class="form-control" placeholder="Password"/>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-block mb-4">Logga in</button>
+        </div>
+    </form>
+{% endblock %}

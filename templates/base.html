@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" class="h-100 align-items-center">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!--link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-night.min.css" rel="stylesheet"-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body class=" mx-auto" style="width: 520px;">
+<nav class="navbar bg-light">
+    <div class="container-fluid">
+        {% if current_user.is_authenticated %}
+        <a class="navbar-brand" href="/archive">
+            Arkiv
+        </a>
+        <a class="navbar-brand" href="/">
+            CSV Läsare
+        </a>
+        </a>
+        <a class="navbar-brand" href="/logout">
+            Loga ut
+        </a>
+        {% else %}
+            Du måste loga in
+        {% endif %}
+    </div>
+
+</nav>
+{% block body %}{% endblock %}
+
+<footer>
+    <div class="d-flex align-items-center">
+        <span class="text-muted">Created by Alexander Shchetinin</span>
+        <ul class="nav mt-auto justify-content-end d-flex">
+            <li class="ms-3">
+                <a class="text-muted" href="https://www.linkedin.com/in/alshfu/">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav mt-auto justify-content-end d-flex">
+            <li class="ms-3">
+                <a class="text-muted" href="mailto:alshfu@gmail.com">
+                    Email: alshfu@gmail.com
+                </a>
+            </li>
+        </ul>
+    </div>
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Archive
+{% endblock %}
+
+
+{% block body %}
+    <main role="main" class="container">
+        <script src="{{ url_for('static',filename='js/sortTable.js') }}"></script>
+        <div class="mb-3 justify-content-end">
+            <div>ID: {{ result["clients"][0]["id"] }}</div>
+            <div>Name: {{ result["clients"][0]["name"] }}</div>
+            <div>Period: {{ result["period"] }}</div>
+            <div style="text-align: right">
+                <a href="/csv?period={{ result.period }}&client_id={{ result["clients"][0]["id"] }}">Exportera som CVS</a>
+            </div>
+            <table class="table table-striped" id="info_table">
+                <thead>
+                <tr>
+                    <th onclick="sortTable(0)" scope="col" style="width: 30px">ID</th>
+                    <th onclick="sortTable(1)" scope="col">Anställd</th>
+                    <th onclick="sortTable(2)" scope="col" style="width: 30px">Timar</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--
+
+-->
+                {% for employer in  result["employers"] %}
+                    <tr>
+                        <td style="width: 30px">
+                            {{ employer.employer_id }}
+                        </td>
+                        <td>
+                            <a href="/period?period={{ result.period }}&client_id={{ result["clients"][0]["id"] }}&employer_id={{ employer.employer_id }}">
+                                {{ employer.employer_name }}
+                            </a>
+                        </td>
+                        <td>{{ employer.time }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+{% endblock %}

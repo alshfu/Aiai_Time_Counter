@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    CSV reader
+{% endblock %}
+
+
+{% block body %}
+    <main class="mt-5">
+        <div class="mb-3 justify-content-end">
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file"
+                           class="custom-file-input"
+                           id="cvs_file"
+                           name="cvs_file"
+                           data-buttonText="Your label here.">
+                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                </div>
+            </div>
+            <form method="post" id="action_form" style="display: none">
+                <div class="mb-3 justify-content-end">
+                    <label id="file_info" for="summary" class="form-label">Filens statestik</label>
+                </div>
+                <div class="row">
+                    <!--<div class="col justify-content-center"  name="clients_id">Bruckarens ID</div> -->
+                    <div class="col justify-content-center"  name="clients_name">Bruckare</div>
+                    <!-- <div class="col justify-content-center"  name="employer_id">Anstäld ID</div> -->
+                    <div class="col justify-content-center"  name="employer_name">Asistent</div>
+                    <div class="col justify-content-center"  name="time_of_work">Timmar</div>
+                    <div class="col justify-content-center"  name="day_of_work">Dag för updrag</div>
+                </div>
+                <div id="error_msg" class="mb-3 justify-content-end" style="color: red"></div>
+                <script src="{{ url_for('static',filename='js/accounting.js') }}"></script>
+                <script src="{{ url_for('static',filename='js/csv.js') }}"></script>
+                <button id="submit_button" type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </main>
+
+{% endblock %}

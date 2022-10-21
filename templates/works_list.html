@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Archive
+{% endblock %}
+
+
+{% block body %}
+    <main role="main" class="container">
+        <script src="{{ url_for('static',filename='js/sortTable.js') }}"></script>
+        <div class="mb-3 justify-content-end">
+            <div>
+                <div class="col" style="text-align: left">Period: {{ result["works"][0].period }}</div>
+
+                <div class="col" style="text-align: left">Bruckare: {{ result["works"][0].client.name }}</div>
+
+                <div class="col" style="text-align: left">Asistent: {{ result["works"][0].employer.name }}</div>
+
+                <div class="col" style="text-align: left">Timmar: {{ result.time }}</div>
+            </div>
+            <div style="text-align: right">
+                <a href="/period?period={{ result["works"][0].period }}&client_id={{ result["works"][0].client.id }}">Till
+                    back</a>
+            </div>
+            <table class="table table-striped" id="info_table">
+                <thead>
+                <tr>
+                    <th onclick="sortTable(0)" scope="col">Datum</th>
+                    <th onclick="sortTable(1)" scope="col">Timar</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for work in  result["works"] %}
+                    <tr>
+                        <td>
+                            {{ work.date }}
+                        </td>
+                        <td>
+                            {{ work.time }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+{% endblock %}
