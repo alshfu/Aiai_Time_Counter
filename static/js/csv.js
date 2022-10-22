@@ -7,13 +7,13 @@ function new_input(data, class_name, name) {
     return input_tr_date;
 }
 
-function createARow(clients_id, clients_name, employer_id, employer_name, day_of_work, time_of_work) {
+function createARow(clients_id, clients_name, employer_id, employer_name, day_of_work, time_of_work, start_of_work, end_of_work) {
     const new_input_group = document.createElement('div')
     new_input_group.className = 'input-group mb-1'
     // clients_id
     const input_clients_id = new_input(clients_id, 'form-control col justify-content-start', 'clients_id');
     input_clients_id.readOnly = "readonly"
-    input_clients_id.style.display ="none"
+    input_clients_id.style.display = "none"
     // clients_name
     const input_clients_name = new_input(clients_name, 'form-control col justify-content-start', 'clients_name');
     input_clients_name.readOnly = "readonly"
@@ -30,6 +30,14 @@ function createARow(clients_id, clients_name, employer_id, employer_name, day_of
     // day_of_work
     const input_day_of_work = new_input(day_of_work, 'form-control col justify-content-center', 'day_of_work')
     input_day_of_work.readOnly = "readonly"
+    //work start
+    const input_start_of_work = new_input(start_of_work, 'form-control col justify-content-center', 'start_of_work')
+    input_start_of_work.readOnly = "readonly"
+    input_start_of_work.style.display = "none"
+    //work end
+    const input_end_of_work = new_input(end_of_work, 'form-control col justify-content-center', 'end_of_work')
+    input_end_of_work.readOnly = "readonly"
+    input_end_of_work.style.display = "none"
 
     new_input_group.appendChild(input_clients_id)
     new_input_group.appendChild(input_clients_name)
@@ -37,6 +45,8 @@ function createARow(clients_id, clients_name, employer_id, employer_name, day_of
     new_input_group.appendChild(input_employer_name)
     new_input_group.appendChild(input_time_of_work)
     new_input_group.appendChild(input_day_of_work)
+    new_input_group.appendChild(input_start_of_work)
+    new_input_group.appendChild(input_end_of_work)
 
 
     document.getElementById("action_form").appendChild(new_input_group);
@@ -117,12 +127,16 @@ UploadDealcsv.prototype.getParseCsvData = function (data) {
             }
             line_counter = line_counter + 1
             time_counter = time_counter + parseFloat(line_from_csv[13])
-            createARow(line_from_csv[1], // clients_id
-                line_from_csv[0], // clients_name
-                line_from_csv[4], // employer_id
-                line_from_csv[3], // employer_name
-                line_from_csv[10],// day_of_work
-                line_from_csv[13] // time_of_work
+            console.log(line_from_csv)
+            createARow(
+                clients_id = line_from_csv[1], // clients_id
+                clients_name = line_from_csv[0], // clients_name
+                employer_id = line_from_csv[4], // employer_id
+                employer_name = line_from_csv[3], // employer_name
+                day_of_work = line_from_csv[10],// day_of_work
+                time_of_work = line_from_csv[13], // time_of_work
+                start_of_work = line_from_csv[11],// start_of_work
+                end_of_work = line_from_csv[12],// end_of_work
             )
         }
     }
@@ -131,18 +145,6 @@ UploadDealcsv.prototype.getParseCsvData = function (data) {
     document.getElementById("action_form").style.display = ""
 }
 
-
-
-function to_hash(string) {
-    let hash = 0;
-    // if (string.length == 0) return hash;
-    // for (x = 0; x < string.length; x++) {
-    //     ch = string.charCodeAt(x);
-    //     hash = ((hash << 5) - hash) + ch;
-    //     hash = hash & hash;
-    // }
-    return hash;
-}
 
 let parseCsv = new UploadDealcsv();
 parseCsv.getCsv();

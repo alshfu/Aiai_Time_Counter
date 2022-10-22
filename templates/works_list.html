@@ -26,6 +26,8 @@
                 <thead>
                 <tr>
                     <th onclick="sortTable(0)" scope="col">Datum</th>
+                    <th onclick="sortTable(0)" scope="col">Från</th>
+                    <th onclick="sortTable(0)" scope="col">Till</th>
                     <th onclick="sortTable(1)" scope="col">Timar</th>
                 </tr>
                 </thead>
@@ -34,6 +36,11 @@
                     <tr>
                         <td>
                             {{ work.date }}
+                        </td>
+                        <td>
+                            {{ work.start }}
+                        </td><td>
+                            {{ work.end }}
                         </td>
                         <td>
                             {{ work.time }}

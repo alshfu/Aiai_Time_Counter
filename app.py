@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, send_file
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import and_, select
+from sqlalchemy import and_
 from flask_login import LoginManager, login_required, login_user, logout_user
 
 import csv
@@ -87,14 +87,18 @@ class Works(db.Model):
     employer = db.relationship('Employers', back_populates="work")
     period = db.Column(db.String(10))
     date = db.Column(db.String(100))
+    start = db.Column(db.String(100))
+    end = db.Column(db.String(100))
     time = db.Column(db.Float)
 
-    def __init__(self, client_id, employer_id, date, time, period):
+    def __init__(self, client_id, employer_id, date, time, period, start, end):
         self.client_id = client_id
         self.employer_id = employer_id
         self.date = date
         self.time = time
         self.period = period
+        self.start = start
+        self.end = end
 
 
 with app.app_context():
@@ -108,7 +112,11 @@ with app.app_context():
 def index():
     if request.method == 'POST':
         form = request.form
+        print("IM HIRE")
+        print(form.getlist('day_of_work'))
         for i in range(len(form.getlist('day_of_work'))):
+
+            print(form.getlist('start_of_work')[i][11:])
 
             if_client_exists = db.session.query(
                 db.exists().where(Clients.id == form.getlist('clients_id')[i])).scalar()
@@ -126,6 +134,7 @@ def index():
                                  name=form.getlist('clients_name')[i])
                 db.session.add(client)
                 db.session.commit()
+
             day_of_work = form.getlist('day_of_work')[i]
             time = float(form.getlist('time_of_work')[i].replace(',', '.'))
             if_work_exists = db.session.query(
@@ -133,19 +142,21 @@ def index():
                     employer_id=form.getlist('employer_id')[i],
                     client_id=form.getlist('clients_id')[i],
                     date=form.getlist('day_of_work')[i],
-                    time=float(form.getlist('time_of_work')[i].replace(',', '.'))
+                    time=float(form.getlist('time_of_work')[i].replace(',', '.')),
+                    start=form.getlist('start_of_work')[i][11:],
+                    end=form.getlist('end_of_work')[i][11:],
                 ).exists()).scalar()
-
             print(if_work_exists)
             if not if_work_exists:
                 work = Works(employer_id=form.getlist('employer_id')[i],
                              client_id=form.getlist('clients_id')[i],
                              date=day_of_work,
                              period=day_of_work[:-3],
+                             start=form.getlist('start_of_work')[i][11:],
+                             end=form.getlist('end_of_work')[i][11:],
                              time=time)
                 db.session.add(work)
                 db.session.commit()
-
         return redirect("/archive")
     return render_template("index.html")
 
@@ -185,7 +196,7 @@ def period():
               "employers": [],
               "works": [],
               "time": ""}
-    res_list = []
+    res_list = make_list_with_employers_time()
     if request.method == 'GET':
         result["period"] = request.values["period"]
         if "client_id" not in request.values and "employer_id" not in request.values:
@@ -202,23 +213,13 @@ def period():
                     res_list.append(result["clients"][i])
             result["clients"] = res_list
         elif "client_id" in request.values and "period" in request.values and "employer_id" not in request.values:
-            works = db.session.query(Works).filter(
-                and_(
-                    Works.period.like(request.values["period"]),
-                    Works.client_id.like(request.values["client_id"])
-                )
-            )
+            works = get_works()
             result["clients"].append(works[0].client)
             result["period"] = request.values["period"]
-            employers = []
-            employers_tmp_id = []
-            employers_tmp = []
-            for work in works:
-                employers.append({
-                    "employer_id": work.employer.id,
-                    "employer_name": work.employer.name,
-                    "time": work.time
-                })
+            employers = make_list_with_employers_time()
+            employers_tmp_id = make_list_with_employers_time()
+            employers_tmp = make_list_with_employers_time()
+            extract_employers_from_works(employers, works)
             for employer in employers:
                 if not employer["employer_id"] in employers_tmp_id:
                     employers_tmp_id.append(employer["employer_id"])
@@ -249,6 +250,30 @@ def period():
     return render_template("clients_list.html", result=result)
 
 
+def extract_employers_from_works(employers, works):
+    for work in works:
+        employers.append({
+            "employer_id": work.employer.id,
+            "employer_name": work.employer.name,
+            "time": work.time
+        })
+
+
+def make_list_with_employers_time():
+    employers = []
+    return employers
+
+
+def get_works():
+    works = db.session.query(Works).filter(
+        and_(
+            Works.period.like(request.values["period"]),
+            Works.client_id.like(request.values["client_id"])
+        )
+    )
+    return works
+
+
 @app.route("/csv", methods=['POST', 'GET'])
 @login_required
 def create_csv():
@@ -271,12 +296,7 @@ def create_csv():
             employers = []
             employers_tmp_id = []
             employers_tmp = []
-            for work in works:
-                employers.append({
-                    "employer_id": work.employer.id,
-                    "employer_name": work.employer.name,
-                    "time": work.time
-                })
+            extract_employers_from_works(employers, works)
             for employer in employers:
                 if not employer["employer_id"] in employers_tmp_id:
                     employers_tmp_id.append(employer["employer_id"])
@@ -322,7 +342,6 @@ def custom_401(error):
     return redirect('/login')
 
 
-
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     # if current_user.is_authenticated:
@@ -337,11 +356,9 @@ def login():
             if user.password == request.form['password']:
                 print(user.login_name, " are now in ")
                 print(user)
-                userlogin = UserLogin().create(user)
-                login_user(userlogin)
+                user_login = UserLogin().create(user)
+                login_user(user_login)
                 return redirect('/')
-        # rm = True if request.form.get('remainme') else False
-        # login_user(userlogin, remember=rm)
         return redirect('/login')
 
     return render_template("login.html")
