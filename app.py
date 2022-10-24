@@ -306,7 +306,7 @@ def create_csv():
                         if employers_tmp[i]["employer_id"] == employer["employer_id"]:
                             employers_tmp[i]["time"] = employers_tmp[i]["time"] + employer["time"]
             result["static/uploads/test"] = employers_tmp
-            path = f"""static/uploads/{works[0].client.name}_{works[0].period}.cvs"""
+            path = f"""static/uploads/{works[0].client.name}_{works[0].period}.csv"""
             file = open(path, "w")
             writer = csv.writer(file, delimiter=';')
             for employer in employers_tmp:
@@ -352,7 +352,7 @@ def login():
         print(request.form["password"])
         user = User.query.filter_by(login_name=request.form["login"]).first()
         print(user)
-        if user != None:
+        if user is not None:
             if user.password == request.form['password']:
                 print(user.login_name, " are now in ")
                 print(user)
@@ -371,4 +371,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="127.0.0.1")
+    app.run(debug=False)

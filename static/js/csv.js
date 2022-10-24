@@ -89,35 +89,6 @@ UploadDealcsv.prototype.getParseCsvData = function (data) {
     let employers = []
 
     for (let line_from_csv of parsedata) {
-
-        //console.log("0",line_from_csv[0]) // Brukare
-        //console.log("1",line_from_csv[1]) // Brukare nr
-        //console.log("2",line_from_csv[2]) // Brukare personnummer
-        //console.log("3",line_from_csv[3]) // Assistent
-        //console.log("4",line_from_csv[4]) // Anst nr
-        //console.log("5",line_from_csv[5]) // Assistent personnummer
-        //console.log("6",line_from_csv[6]) // Schematyp
-        //console.log("7",line_from_csv[7]) // Kostnadsställe
-        //console.log("8",line_from_csv[8]) // Beslut
-        //console.log("9",line_from_csv[9]) // Månad
-        //console.log("10",line_from_csv[10]) // Datum
-        //console.log("11",line_from_csv[11]) // Start
-        //console.log("12",line_from_csv[12]) // Slut
-        //console.log("13",line_from_csv[13]) // Timmar
-        //console.log("14",line_from_csv[14]) // Vardag kväll
-        //console.log("15",line_from_csv[15]) // Vardag natt
-        //console.log("16",line_from_csv[16]) // Veckoslut
-        //console.log("17",line_from_csv[17]) // Veckoslut natt
-        //console.log("18",line_from_csv[18]) // Storhelg
-        //console.log("19",line_from_csv[19]) // Storhelg natt
-        //console.log("20",line_from_csv[20]) // Jour vardag
-        //console.log("21",line_from_csv[21]) // Jour helg
-        //console.log(
-        //    "Anstäld ID: ", line_from_csv[4],
-        //    "Namn: ", line_from_csv[3],
-        //    "Datum: ", line_from_csv[10],
-        //    "Timmar: ", line_from_csv[13],
-        //    "Månad: ", line_from_csv[9])
         if (line_from_csv[4] !== undefined) {
             if (!employers.includes(line_from_csv[1])) {
                 employers.push(line_from_csv[1])
